@@ -1,0 +1,594 @@
+{
+  "openapi": "3.0.3",
+  "info":
+    {
+      "version": "1.2",
+      "title": "API cервиса корпоративных обсуждений «МУЗА»",
+      "description": "API для сервиса вопросов и ответов (внутрекоропративный аналог Stack Overflow)",
+    },
+  "servers":
+    [{ "url": "http://127.0.0.1", "description": "Generated server url" }],
+  "security": [{ "JWTAuth": [] }],
+  "paths":
+    {
+      "/posts/{id}":
+        {
+          "get":
+            {
+              "tags": ["Посты"],
+              "summary": "Получить пост по ID",
+              "description": "Возвращает пост с указанным идентификатором.",
+              "operationId": "getPostById",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID поста",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                    "example": 42,
+                  },
+                ],
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Пост не найден",
+                      "content":
+                        {
+                          "*/*":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/ErrorDetails" },
+                            },
+                        },
+                    },
+                  "200":
+                    {
+                      "description": "Пост найден",
+                      "content":
+                        {
+                          "*/*":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/PostDTO" },
+                            },
+                        },
+                    },
+                  "401":
+                    {
+                      "description": "Неавторизован",
+                      "content":
+                        {
+                          "*/*":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/PostDTO" },
+                            },
+                        },
+                    },
+                },
+              "security": [{ "bearerAuth": [] }],
+            },
+          "put":
+            {
+              "tags": ["Посты"],
+              "summary": "Обновить пост",
+              "description": "Обновляет содержимое поста, если текущий пользователь является его автором.",
+              "operationId": "updatePost",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID поста",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                    "example": 42,
+                  },
+                ],
+              "requestBody":
+                {
+                  "description": "Данные для обновления поста",
+                  "content":
+                    {
+                      "application/json":
+                        {
+                          "schema":
+                            {
+                              "$ref": "#/components/schemas/UpdatePostRequest",
+                            },
+                          "examples":
+                            {
+                              "Пример запроса":
+                                {
+                                  "description": "Пример запроса",
+                                  "value":
+                                    {
+                                      "title": "Обновленный заголовок",
+                                      "content": "Новый текст",
+                                    },
+                                },
+                            },
+                        },
+                    },
+                  "required": true,
+                },
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Пост не найден",
+                      "content":
+                        {
+                          "*/*":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/ErrorDetails" },
+                            },
+                        },
+                    },
+                  "204": { "description": "Пост обновлен успешно" },
+                  "400": { "description": "Некорректные данные запроса" },
+                  "403": { "description": "Доступ запрещен" },
+                },
+              "security": [{ "bearerAuth": [] }],
+            },
+          "delete":
+            {
+              "tags": ["Посты"],
+              "summary": "Удалить пост",
+              "description": "Удаляет пост по идентификатору. Доступно только автору поста.",
+              "operationId": "deletePost",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID поста",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                    "example": 42,
+                  },
+                ],
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Пост не найден",
+                      "content":
+                        {
+                          "*/*":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/ErrorDetails" },
+                            },
+                        },
+                    },
+                  "204": { "description": "Пост удален" },
+                  "403": { "description": "Доступ запрещен" },
+                },
+              "security": [{ "bearerAuth": [] }],
+            },
+        },
+      "/posts":
+        {
+          "get":
+            {
+              "tags": ["Посты"],
+              "summary": "Получить список постов",
+              "description": "Возвращает пагинированный список постов. Можно указать строку поиска `query` или фильтровать по `parentId`.",
+              "operationId": "getPosts",
+              "parameters":
+                [
+                  {
+                    "name": "query",
+                    "in": "query",
+                    "description": "Строка поиска по постам",
+                    "required": false,
+                    "schema": { "type": "string" },
+                    "example": "Spring Boot",
+                  },
+                  {
+                    "name": "parentId",
+                    "in": "query",
+                    "description": "ID родительского поста для получения ответов",
+                    "required": false,
+                    "schema": { "type": "integer", "format": "int64" },
+                    "example": 42,
+                  },
+                  {
+                    "name": "pageable",
+                    "in": "query",
+                    "description": "Параметры пагинации и сортировки",
+                    "required": true,
+                    "schema": { "$ref": "#/components/schemas/Pageable" },
+                  },
+                ],
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "*/*":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/ErrorDetails" },
+                            },
+                        },
+                    },
+                  "200":
+                    {
+                      "description": "Список постов получен успешно",
+                      "content":
+                        {
+                          "*/*":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/PostDTO" },
+                            },
+                        },
+                    },
+                  "401":
+                    {
+                      "description": "Неавторизован",
+                      "content":
+                        {
+                          "*/*":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/PagePostDTO" },
+                            },
+                        },
+                    },
+                  "403":
+                    {
+                      "description": "Доступ запрещен",
+                      "content":
+                        {
+                          "*/*":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/PagePostDTO" },
+                            },
+                        },
+                    },
+                },
+              "security": [{ "bearerAuth": [] }],
+            },
+          "post":
+            {
+              "tags": ["Посты"],
+              "summary": "Создать новый пост",
+              "description": "Создает новый пост от имени аутентифицированного пользователя.",
+              "operationId": "createPost",
+              "requestBody":
+                {
+                  "description": "Данные для создания поста",
+                  "content":
+                    {
+                      "application/json":
+                        {
+                          "schema":
+                            {
+                              "$ref": "#/components/schemas/CreatePostRequest",
+                            },
+                          "examples":
+                            {
+                              "Пример запроса":
+                                {
+                                  "description": "Пример запроса",
+                                  "value":
+                                    {
+                                      "title": "Мой первый пост",
+                                      "content": "Текст поста...",
+                                    },
+                                },
+                            },
+                        },
+                    },
+                  "required": true,
+                },
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "*/*":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/ErrorDetails" },
+                            },
+                        },
+                    },
+                  "201":
+                    {
+                      "description": "Пост успешно создан",
+                      "content":
+                        {
+                          "*/*":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/PostDTO" },
+                            },
+                        },
+                    },
+                  "400":
+                    {
+                      "description": "Некорректные данные запроса",
+                      "content":
+                        {
+                          "*/*":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/PostDTO" },
+                            },
+                        },
+                    },
+                  "401":
+                    {
+                      "description": "Неавторизован",
+                      "content":
+                        {
+                          "*/*":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/PostDTO" },
+                            },
+                        },
+                    },
+                },
+              "security": [{ "bearerAuth": [] }],
+            },
+        },
+      "/posts/{id}/votes":
+        {
+          "get":
+            {
+              "tags": ["vote-controller"],
+              "summary": "Получить голос за пост",
+              "description": "Загружает голос авторизованного пользователя на указанный пост",
+              "operationId": "getVote",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "query",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                  },
+                ],
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "*/*":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/ErrorDetails" },
+                            },
+                        },
+                    },
+                  "200":
+                    {
+                      "description": "OK",
+                      "content":
+                        {
+                          "*/*":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/VoteDTO" },
+                            },
+                        },
+                    },
+                },
+            },
+          "post":
+            {
+              "tags": ["vote-controller"],
+              "summary": "Голосовать за пост",
+              "description": "Создает голос за пост от имени аутентифицированного пользователя",
+              "operationId": "createVote",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "query",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                  },
+                ],
+              "requestBody":
+                {
+                  "content":
+                    {
+                      "application/json":
+                        {
+                          "schema":
+                            {
+                              "type": "string",
+                              "enum": ["POSITIVE", "NEGATIVE"],
+                            },
+                        },
+                    },
+                  "required": true,
+                },
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "*/*":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/ErrorDetails" },
+                            },
+                        },
+                    },
+                  "200": { "description": "OK" },
+                },
+            },
+        },
+    },
+  "components":
+    {
+      "schemas":
+        {
+          "ErrorDetails":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "statusCode": { "type": "integer", "format": "int32" },
+                  "message": { "type": "string" },
+                  "details": { "type": "string" },
+                },
+            },
+          "UpdatePostRequest":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "title": { "type": "string" },
+                  "body": { "type": "string" },
+                  "answerId": { "type": "integer", "format": "int64" },
+                },
+            },
+          "CreatePostRequest":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "title": { "type": "string" },
+                  "body": { "type": "string" },
+                  "postType":
+                    { "type": "string", "enum": ["QUESTION", "ANSWER"] },
+                  "parentId": { "type": "integer", "format": "int64" },
+                },
+            },
+          "PostDTO":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "id": { "type": "integer", "format": "int64" },
+                  "title": { "type": "string" },
+                  "body": { "type": "string" },
+                  "postType":
+                    { "type": "string", "enum": ["QUESTION", "ANSWER"] },
+                  "author": { "$ref": "#/components/schemas/UserDTO" },
+                  "parentId": { "type": "integer", "format": "int64" },
+                  "answerId": { "type": "integer", "format": "int64" },
+                  "created": { "type": "string", "format": "date-time" },
+                  "updated": { "type": "string", "format": "date-time" },
+                  "score": { "type": "integer", "format": "int64" },
+                  "answers_count": { "type": "integer", "format": "int64" },
+                  "usersVote":
+                    { "type": "string", "enum": ["POSITIVE", "NEGATIVE"] },
+                },
+            },
+          "UserDTO":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "id": { "type": "integer", "format": "int64" },
+                  "externalId": { "type": "integer", "format": "int64" },
+                  "internalId": { "type": "string", "format": "uuid" },
+                  "userType":
+                    { "type": "string", "enum": ["EXTERNAL", "INTERNAL"] },
+                  "name": { "type": "string" },
+                },
+            },
+          "Pageable":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "page":
+                    { "type": "integer", "format": "int32", "minimum": 0 },
+                  "size":
+                    { "type": "integer", "format": "int32", "minimum": 1 },
+                  "sort": { "type": "array", "items": { "type": "string" } },
+                },
+            },
+          "PagePostDTO":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "totalElements": { "type": "integer", "format": "int64" },
+                  "totalPages": { "type": "integer", "format": "int32" },
+                  "pageable": { "$ref": "#/components/schemas/PageableObject" },
+                  "numberOfElements": { "type": "integer", "format": "int32" },
+                  "size": { "type": "integer", "format": "int32" },
+                  "content":
+                    {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/PostDTO" },
+                    },
+                  "number": { "type": "integer", "format": "int32" },
+                  "sort": { "$ref": "#/components/schemas/SortObject" },
+                  "first": { "type": "boolean" },
+                  "last": { "type": "boolean" },
+                  "empty": { "type": "boolean" },
+                },
+            },
+          "PageableObject":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "pageNumber": { "type": "integer", "format": "int32" },
+                  "paged": { "type": "boolean" },
+                  "pageSize": { "type": "integer", "format": "int32" },
+                  "offset": { "type": "integer", "format": "int64" },
+                  "sort": { "$ref": "#/components/schemas/SortObject" },
+                  "unpaged": { "type": "boolean" },
+                },
+            },
+          "SortObject":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "sorted": { "type": "boolean" },
+                  "unsorted": { "type": "boolean" },
+                  "empty": { "type": "boolean" },
+                },
+            },
+          "VoteDTO":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "id": { "type": "integer", "format": "int64" },
+                  "postId": { "type": "integer", "format": "int64" },
+                  "created": { "type": "string", "format": "date-time" },
+                  "type":
+                    { "type": "string", "enum": ["POSITIVE", "NEGATIVE"] },
+                },
+            },
+        },
+      "securitySchemes":
+        {
+          "JWTAuth":
+            {
+              "type": "http",
+              "name": "JWTAuth",
+              "scheme": "bearer",
+              "bearerFormat": "JWT",
+            },
+        },
+    },
+}
