@@ -561,7 +561,7 @@
                     "name": "id",
                     "in": "path",
                     "required": true,
-                    "schema": { "type": "integer" },
+                    "schema": { "type": "integer", "format": "int64" },
                   },
                 ],
               "responses":
@@ -592,7 +592,7 @@
                     "name": "id",
                     "in": "path",
                     "required": true,
-                    "schema": { "type": "integer" },
+                    "schema": { "type": "integer", "format": "int64" },
                   },
                 ],
               "requestBody":
@@ -624,7 +624,7 @@
                     "name": "id",
                     "in": "path",
                     "required": true,
-                    "schema": { "type": "integer" },
+                    "schema": { "type": "integer", "format": "int64" },
                   },
                 ],
               "responses":
@@ -690,7 +690,11 @@
                   "answers_count": { "type": "integer", "format": "int64" },
                   "usersVote":
                     { "type": "string", "enum": ["POSITIVE", "NEGATIVE"] },
-                  "tags": { "type": "array", "items": { "type": "string" } },
+                  "tags":
+                    {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/TagDTO" },
+                    },
                 },
             },
           "UserDTO":
@@ -782,11 +786,7 @@
                 {
                   "id": { "type": "integer", "example": 1 },
                   "name": { "type": "string", "example": "java" },
-                  "description":
-                    {
-                      "type": "string",
-                      "example": "Язык программирования Java",
-                    },
+                  "postid": { "type": "integer", "format": "int64" },
                 },
             },
           "CreateTagRequest":
