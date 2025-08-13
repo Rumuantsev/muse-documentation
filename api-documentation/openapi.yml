@@ -4,7 +4,9 @@
     {
       "version": "1.2",
       "title": "API cервиса корпоративных обсуждений «МУЗА»",
-      "description": "API для сервиса вопросов и ответов (внутрекоропративный аналог Stack Overflow)",
+      "description":
+        "API для взаимодействия клиентской и серверной части сервиса \n\n
+        СТАТУСЫ:\n\n START - endpoint добавлен как запланированный\n\n READY_TO_DEV - endpoint готов к разработке\n\n REVIEW - endpoint разработан для одних функций, но требует доработки для других функций или более детальной проработки\n\n END - работа над endpoint окончена",
     },
   "servers":
     [{ "url": "http://127.0.0.1", "description": "Generated server url" }],
@@ -16,7 +18,7 @@
           "get":
             {
               "tags": ["Посты"],
-              "summary": "Получить пост по ID",
+              "summary": "Получить пост по ID  REVIEW",
               "description": "Возвращает пост с указанным идентификатором.",
               "operationId": "getPostById",
               "parameters":
@@ -32,27 +34,27 @@
                 ],
               "responses":
                 {
-                  "404":
-                    {
-                      "description": "Пост не найден",
-                      "content":
-                        {
-                          "*/*":
-                            {
-                              "schema":
-                                { "$ref": "#/components/schemas/ErrorDetails" },
-                            },
-                        },
-                    },
                   "200":
                     {
                       "description": "Пост найден",
                       "content":
                         {
-                          "*/*":
+                          "application/json":
                             {
                               "schema":
                                 { "$ref": "#/components/schemas/PostDTO" },
+                            },
+                        },
+                    },
+                  "404":
+                    {
+                      "description": "Пост не найден",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/ErrorDetails" },
                             },
                         },
                     },
@@ -61,7 +63,7 @@
                       "description": "Неавторизован",
                       "content":
                         {
-                          "*/*":
+                          "application/json":
                             {
                               "schema":
                                 { "$ref": "#/components/schemas/PostDTO" },
@@ -74,7 +76,7 @@
           "put":
             {
               "tags": ["Посты"],
-              "summary": "Обновить пост",
+              "summary": "Обновить пост  REVIEW",
               "description": "Обновляет содержимое поста, если текущий пользователь является его автором.",
               "operationId": "updatePost",
               "parameters":
@@ -122,7 +124,7 @@
                       "description": "Пост не найден",
                       "content":
                         {
-                          "*/*":
+                          "application/json":
                             {
                               "schema":
                                 { "$ref": "#/components/schemas/ErrorDetails" },
@@ -138,7 +140,7 @@
           "delete":
             {
               "tags": ["Посты"],
-              "summary": "Удалить пост",
+              "summary": "Удалить пост  REVIEW",
               "description": "Удаляет пост по идентификатору. Доступно только автору поста.",
               "operationId": "deletePost",
               "parameters":
@@ -159,7 +161,7 @@
                       "description": "Пост не найден",
                       "content":
                         {
-                          "*/*":
+                          "application/json":
                             {
                               "schema":
                                 { "$ref": "#/components/schemas/ErrorDetails" },
@@ -177,7 +179,7 @@
           "get":
             {
               "tags": ["Посты"],
-              "summary": "Получить список постов",
+              "summary": "Получить список постов REVIEW",
               "description": "Возвращает пагинированный список постов. Можно указать строку поиска `query` или фильтровать по `parentId`.",
               "operationId": "getPosts",
               "parameters":
@@ -213,7 +215,7 @@
                       "description": "Not Found",
                       "content":
                         {
-                          "*/*":
+                          "application/json":
                             {
                               "schema":
                                 { "$ref": "#/components/schemas/ErrorDetails" },
@@ -225,7 +227,7 @@
                       "description": "Список постов получен успешно",
                       "content":
                         {
-                          "*/*":
+                          "application/json":
                             {
                               "schema":
                                 { "$ref": "#/components/schemas/PostDTO" },
@@ -237,7 +239,7 @@
                       "description": "Неавторизован",
                       "content":
                         {
-                          "*/*":
+                          "application/json":
                             {
                               "schema":
                                 { "$ref": "#/components/schemas/PagePostDTO" },
@@ -249,7 +251,7 @@
                       "description": "Доступ запрещен",
                       "content":
                         {
-                          "*/*":
+                          "application/json":
                             {
                               "schema":
                                 { "$ref": "#/components/schemas/PagePostDTO" },
@@ -262,7 +264,7 @@
           "post":
             {
               "tags": ["Посты"],
-              "summary": "Создать новый пост",
+              "summary": "Создать новый пост REVIEW",
               "description": "Создает новый пост от имени аутентифицированного пользователя.",
               "operationId": "createPost",
               "requestBody":
@@ -299,7 +301,7 @@
                       "description": "Not Found",
                       "content":
                         {
-                          "*/*":
+                          "application/json":
                             {
                               "schema":
                                 { "$ref": "#/components/schemas/ErrorDetails" },
@@ -311,7 +313,7 @@
                       "description": "Пост успешно создан",
                       "content":
                         {
-                          "*/*":
+                          "application/json":
                             {
                               "schema":
                                 { "$ref": "#/components/schemas/PostDTO" },
@@ -323,7 +325,7 @@
                       "description": "Некорректные данные запроса",
                       "content":
                         {
-                          "*/*":
+                          "application/json":
                             {
                               "schema":
                                 { "$ref": "#/components/schemas/PostDTO" },
@@ -335,7 +337,7 @@
                       "description": "Неавторизован",
                       "content":
                         {
-                          "*/*":
+                          "application/json":
                             {
                               "schema":
                                 { "$ref": "#/components/schemas/PostDTO" },
@@ -350,8 +352,8 @@
         {
           "get":
             {
-              "tags": ["vote-controller"],
-              "summary": "Получить голос за пост",
+              "tags": ["Голоса"],
+              "summary": "Получить голос за пост  REVIEW",
               "description": "Загружает голос авторизованного пользователя на указанный пост",
               "operationId": "getVote",
               "parameters":
@@ -370,7 +372,7 @@
                       "description": "Not Found",
                       "content":
                         {
-                          "*/*":
+                          "application/json":
                             {
                               "schema":
                                 { "$ref": "#/components/schemas/ErrorDetails" },
@@ -382,7 +384,7 @@
                       "description": "OK",
                       "content":
                         {
-                          "*/*":
+                          "application/json":
                             {
                               "schema":
                                 { "$ref": "#/components/schemas/VoteDTO" },
@@ -393,8 +395,8 @@
             },
           "post":
             {
-              "tags": ["vote-controller"],
-              "summary": "Голосовать за пост",
+              "tags": ["Голоса"],
+              "summary": "Голосовать за пост  REVIEW",
               "description": "Создает голос за пост от имени аутентифицированного пользователя",
               "operationId": "createVote",
               "parameters":
@@ -428,7 +430,7 @@
                       "description": "Not Found",
                       "content":
                         {
-                          "*/*":
+                          "application/json":
                             {
                               "schema":
                                 { "$ref": "#/components/schemas/ErrorDetails" },
@@ -436,6 +438,197 @@
                         },
                     },
                   "200": { "description": "OK" },
+                },
+            },
+        },
+      "/tags":
+        {
+          "get":
+            {
+              "tags": ["Теги"],
+              "summary": "Получить список тегов START",
+              "description": "Возвращает список тегов с поддержкой поиска, фильтрации и пагинации.",
+              "operationId": "getTags",
+              "parameters":
+                [
+                  {
+                    "name": "query",
+                    "in": "query",
+                    "description": "Поиск по имени тега",
+                    "required": false,
+                    "schema": { "type": "string", "example": "java" },
+                  },
+                  {
+                    "name": "page",
+                    "in": "query",
+                    "description": "Номер страницы (начиная с 0)",
+                    "schema": { "type": "integer", "default": 0 },
+                  },
+                  {
+                    "name": "size",
+                    "in": "query",
+                    "description": "Размер страницы (количество элементов)",
+                    "schema": { "type": "integer", "default": 20 },
+                  },
+                  {
+                    "name": "sort",
+                    "in": "query",
+                    "description": "Сортировка (например: name, usageCount, createdAt)",
+                    "schema":
+                      { "type": "string", "example": "usageCount,desc" },
+                  },
+                ],
+              "responses":
+                {
+                  "200":
+                    {
+                      "description": "Список тегов успешно получен",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "type": "array",
+                                  "items":
+                                    { "$ref": "#/components/schemas/TagDTO" },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+          "post":
+            {
+              "tags": ["Теги"],
+              "summary": "Создать новый тег START",
+              "operationId": "createTag",
+              "requestBody":
+                {
+                  "required": true,
+                  "content":
+                    {
+                      "application/json":
+                        {
+                          "schema":
+                            { "$ref": "#/components/schemas/CreateTagRequest" },
+                          "examples":
+                            {
+                              "example":
+                                {
+                                  "value":
+                                    {
+                                      "name": "spring",
+                                      "description": "Фреймворк Spring для Java",
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+              "responses":
+                {
+                  "201":
+                    {
+                      "description": "Тег успешно создан",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/TagDTO" },
+                            },
+                        },
+                    },
+                  "400": { "description": "Некорректные данные" },
+                  "409":
+                    { "description": "Тег с таким названием уже существует" },
+                },
+            },
+        },
+      "/tags/{id}":
+        {
+          "get":
+            {
+              "tags": ["Теги"],
+              "summary": "Получить тег по ID START",
+              "operationId": "getTagById",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": { "type": "integer" },
+                  },
+                ],
+              "responses":
+                {
+                  "200":
+                    {
+                      "description": "Тег найден",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/TagDTO" },
+                            },
+                        },
+                    },
+                  "404": { "description": "Тег не найден" },
+                },
+            },
+          "put":
+            {
+              "tags": ["Теги"],
+              "summary": "Обновить тег START",
+              "operationId": "updateTag",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": { "type": "integer" },
+                  },
+                ],
+              "requestBody":
+                {
+                  "required": true,
+                  "content":
+                    {
+                      "application/json":
+                        {
+                          "schema":
+                            { "$ref": "#/components/schemas/UpdateTagRequest" },
+                        },
+                    },
+                },
+              "responses":
+                {
+                  "204": { "description": "Тег обновлен" },
+                  "404": { "description": "Тег не найден" },
+                },
+            },
+          "delete":
+            {
+              "tags": ["Теги"],
+              "summary": "Удалить тег START",
+              "operationId": "deleteTag",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": { "type": "integer" },
+                  },
+                ],
+              "responses":
+                {
+                  "204": { "description": "Тег удален" },
+                  "404": { "description": "Тег не найден" },
                 },
             },
         },
@@ -577,6 +770,54 @@
                   "created": { "type": "string", "format": "date-time" },
                   "type":
                     { "type": "string", "enum": ["POSITIVE", "NEGATIVE"] },
+                },
+            },
+          "TagDTO":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "id": { "type": "integer", "example": 1 },
+                  "name": { "type": "string", "example": "java" },
+                  "description":
+                    {
+                      "type": "string",
+                      "example": "Язык программирования Java",
+                    },
+                  "usageCount": { "type": "integer", "example": 124 },
+                  "createdAt":
+                    {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2025-08-10T12:00:00Z",
+                    },
+                },
+            },
+          "CreateTagRequest":
+            {
+              "type": "object",
+              "required": ["name"],
+              "properties":
+                {
+                  "name": { "type": "string", "example": "spring" },
+                  "description":
+                    {
+                      "type": "string",
+                      "example": "Фреймворк Spring для Java",
+                    },
+                },
+            },
+          "UpdateTagRequest":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "name": { "type": "string", "example": "spring-boot" },
+                  "description":
+                    {
+                      "type": "string",
+                      "example": "Подмодуль Spring для быстрой разработки",
+                    },
                 },
             },
         },
