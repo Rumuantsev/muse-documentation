@@ -5,8 +5,10 @@
       "version": "1.2",
       "title": "API cервиса корпоративных обсуждений «МУЗА»",
       "description":
-        "API для взаимодействия клиентской и серверной части сервиса \n\n \n\n
-        СТАТУСЫ:\n\n START - endpoint добавлен как запланированный\n\n READY_TO_DEV - endpoint готов к разработке\n\n REVIEW - endpoint разработан для одних функций, но требует доработки для других функций или более детальной проработки\n\n END - работа над endpoint окончена",
+        "API для взаимодействия клиентской и серверной части сервиса \n\n
+        СТАТУСЫ:\n\n START - endpoint добавлен как запланированный\n\n READY_TO_DEV - endpoint готов к разработке
+        \n\n REVIEW - endpoint разработан для одних функций, но требует доработки для других функций или более детальной проработки\n\n
+        END - работа над endpoint окончена",
     },
   "servers":
     [{ "url": "http://127.0.0.1", "description": "Generated server url" }],
@@ -18,7 +20,7 @@
           "get":
             {
               "tags": ["Посты"],
-              "summary": "Получить пост по ID  REVIEW",
+              "summary": "Получить пост по ID  READY_TO_DEV",
               "description": "Возвращает пост с указанным идентификатором.",
               "operationId": "getPostById",
               "parameters":
@@ -179,7 +181,7 @@
           "get":
             {
               "tags": ["Посты"],
-              "summary": "Получить список постов REVIEW",
+              "summary": "Получить список постов READY_TO_DEV",
               "description": "Возвращает пагинированный список постов. Можно указать строку поиска `query` или фильтровать по `parentId`.",
               "operationId": "getPosts",
               "parameters":
@@ -199,6 +201,14 @@
                     "required": false,
                     "schema": { "type": "integer", "format": "int64" },
                     "example": 42,
+                  },
+                  {
+                    "name": "tagId",
+                    "in": "query",
+                    "description": "ID тега для получения постов по тегу",
+                    "required": false,
+                    "schema": { "type": "integer", "format": "int64" },
+                    "example": "2",
                   },
                   {
                     "name": "pageable",
@@ -264,7 +274,7 @@
           "post":
             {
               "tags": ["Посты"],
-              "summary": "Создать новый пост REVIEW",
+              "summary": "Создать новый пост READY_TO_DEV",
               "description": "Создает новый пост от имени аутентифицированного пользователя.",
               "operationId": "createPost",
               "requestBody":
@@ -447,7 +457,7 @@
             {
               "tags": ["Теги"],
               "summary": "Получить список тегов START",
-              "description": "Возвращает список тегов с поддержкой поиска, фильтрации и пагинации.",
+              "description": "Возвращает список тегов с поддержкой поиска и пагинации.",
               "operationId": "getTags",
               "parameters":
                 [
@@ -455,7 +465,6 @@
                     "name": "query",
                     "in": "query",
                     "description": "Поиск по имени тега",
-                    "required": false,
                     "schema": { "type": "string", "example": "java" },
                   },
                   {
@@ -469,13 +478,6 @@
                     "in": "query",
                     "description": "Размер страницы (количество элементов)",
                     "schema": { "type": "integer", "default": 20 },
-                  },
-                  {
-                    "name": "sort",
-                    "in": "query",
-                    "description": "Сортировка (например: name, usageCount, createdAt)",
-                    "schema":
-                      { "type": "string", "example": "usageCount,desc" },
                   },
                 ],
               "responses":
@@ -601,7 +603,7 @@
                       "application/json":
                         {
                           "schema":
-                            { "$ref": "#/components/schemas/UpdateTagRequest" },
+                            { "$ref": "#/components/schemas/CreateTagRequest" },
                         },
                     },
                 },
@@ -688,6 +690,7 @@
                   "answers_count": { "type": "integer", "format": "int64" },
                   "usersVote":
                     { "type": "string", "enum": ["POSITIVE", "NEGATIVE"] },
+                  "tags": { "type": "array", "items": { "type": "string" } },
                 },
             },
           "UserDTO":
@@ -784,13 +787,6 @@
                       "type": "string",
                       "example": "Язык программирования Java",
                     },
-                  "usageCount": { "type": "integer", "example": 124 },
-                  "createdAt":
-                    {
-                      "type": "string",
-                      "format": "date-time",
-                      "example": "2025-08-10T12:00:00Z",
-                    },
                 },
             },
           "CreateTagRequest":
@@ -804,19 +800,6 @@
                     {
                       "type": "string",
                       "example": "Фреймворк Spring для Java",
-                    },
-                },
-            },
-          "UpdateTagRequest":
-            {
-              "type": "object",
-              "properties":
-                {
-                  "name": { "type": "string", "example": "spring-boot" },
-                  "description":
-                    {
-                      "type": "string",
-                      "example": "Подмодуль Spring для быстрой разработки",
                     },
                 },
             },
