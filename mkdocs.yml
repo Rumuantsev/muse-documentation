@@ -29,8 +29,8 @@ plugins:
 nav:
   - Главная: index.md
   - Требования:
-      - Требования/ft.md
-      - Требования/nft.md
+      - Требования/functional-requirement.md
+      - Требования/nonfunctional-requirement.md
   - API документация: api-documentation/index.html
 markdown_extensions:
   - attr_list
