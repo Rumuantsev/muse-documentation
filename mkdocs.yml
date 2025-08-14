@@ -1,0 +1,45 @@
+site_name: Документация сервиса Муза
+site_url: https://rumuantsev.github.io/muse-documentation/
+repo_name: Rumuantsev/muse-documentation
+repo_url: https://github.com/Rumuantsev/muse-documentation
+
+theme:
+  name: material
+  palette:
+    # scheme: light blue
+    # Palette toggle for light mode
+    - primary: light
+      toggle:
+        icon: material/brightness-7
+        name: Перейти на тёмную тему
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Перейти на светлую тему
+  language: ru
+  features:
+    - content.code.copy
+  custom_dir: overrides
+plugins:
+  #   - offline
+  - search
+  - awesome-pages
+nav:
+  - Главная: index.md
+  - Требования:
+      - Требования/ft.md
+      - Требования/nft.md
+  - API документация: api-documentation/index.html
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - pymdownx.blocks.caption
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
