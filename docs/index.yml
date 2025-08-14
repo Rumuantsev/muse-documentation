@@ -27,7 +27,7 @@ plugins:
   - search
   - awesome-pages
 nav:
-  - Главная: index.md
+  - Главная: main.md
   - Требования:
       - Требования/functional-requirement.md
       - Требования/nonfunctional-requirement.md
