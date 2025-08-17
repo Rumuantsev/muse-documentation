@@ -1,18 +1,17 @@
-site_name: Муза docs
-site_url: https://malykhsergey.github.io/muse-service/
-site_author: MalykhSergey
-repo_name: MalykhSergey/muse-service
-repo_url: https://github.com/MalykhSergey/muse-service
+site_name: Документация сервиса МУЗА
+site_url: https://rumuantsev.github.io/muse-documentation/
+site_author: Rumuantsev Arseniy
+repo_name: Rumuantsev/muse-service
+repo_url: https://github.com/Rumuantsev/muse-documentation
 
 theme:
   name: material
-  palette: 
-    
+  palette:
     # scheme: light blue
     # Palette toggle for light mode
     - primary: light
       toggle:
-        icon: material/brightness-7 
+        icon: material/brightness-7
         name: Перейти на тёмную сторону
 
     # Palette toggle for dark mode
@@ -24,8 +23,8 @@ theme:
   features:
     - content.code.copy
   custom_dir: overrides
-# plugins:
-#   - offline
+plugins:
+  - swagger-ui-tag
 markdown_extensions:
   - attr_list
   - md_in_html
@@ -37,4 +36,3 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
-
