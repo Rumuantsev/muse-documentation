@@ -1,7 +1,7 @@
 site_name: Документация сервиса МУЗА
 site_url: https://rumuantsev.github.io/muse-documentation/
 site_author: Rumuantsev Arseniy
-repo_name: Rumuantsev/muse-service
+repo_name: Rumuantsev/muse-documentation
 repo_url: https://github.com/Rumuantsev/muse-documentation
 
 theme:
