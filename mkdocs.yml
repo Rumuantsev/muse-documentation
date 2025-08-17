@@ -1,0 +1,40 @@
+site_name: Муза docs
+site_url: https://malykhsergey.github.io/muse-service/
+site_author: MalykhSergey
+repo_name: MalykhSergey/muse-service
+repo_url: https://github.com/MalykhSergey/muse-service
+
+theme:
+  name: material
+  palette: 
+    
+    # scheme: light blue
+    # Palette toggle for light mode
+    - primary: light
+      toggle:
+        icon: material/brightness-7 
+        name: Перейти на тёмную сторону
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Перейти на светлую сторону
+  language: ru
+  features:
+    - content.code.copy
+  custom_dir: overrides
+# plugins:
+#   - offline
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - pymdownx.blocks.caption
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
