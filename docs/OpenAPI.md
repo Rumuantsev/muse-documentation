@@ -1,1 +1,3 @@
-<<swagger-ui src="openapi.yml">>
+# Документация API
+
+<swagger-ui src="openapi.yml">
