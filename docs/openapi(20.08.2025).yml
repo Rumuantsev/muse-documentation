@@ -1,0 +1,1479 @@
+{
+  "openapi": "3.1.0",
+  "info":
+    {
+      "version": "2.0",
+      "title": "API cервиса корпоративных обсуждений «МУЗА»",
+      "description": "API для взаимодействия клиентской и серверной части сервиса",
+    },
+  "servers":
+    [{ "url": "http://127.0.0.1", "description": "Generated server url" }],
+  "security": [{ "JWTAuth": [] }],
+  "paths":
+    {
+      "/posts/{id}":
+        {
+          "get":
+            {
+              "tags": ["Посты"],
+              "summary": "Получить пост по ID",
+              "description": "Возвращает пост по указанному идентификатору",
+              "operationId": "getPostById",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID поста",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                    "example": 42,
+                  },
+                ],
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "200":
+                    {
+                      "description": "OK",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/PostDTO" },
+                            },
+                        },
+                    },
+                },
+            },
+          "put":
+            {
+              "tags": ["Посты"],
+              "summary": "Устанавливает ответ к посту",
+              "operationId": "updatePost",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID поста",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                    "example": 42,
+                  },
+                ],
+              "requestBody":
+                {
+                  "content":
+                    {
+                      "application/json":
+                        {
+                          "schema":
+                            {
+                              "$ref": "#/components/schemas/UpdatePostRequest",
+                            },
+                        },
+                    },
+                  "required": true,
+                },
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "204": { "description": "No Content" },
+                },
+            },
+          "delete":
+            {
+              "tags": ["Посты"],
+              "summary": "Удалить пост",
+              "description": "Удаляет пост по идентификатору (только для автора поста)",
+              "operationId": "deletePost",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID поста",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                    "example": 42,
+                  },
+                ],
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "204": { "description": "No Content" },
+                },
+            },
+          "patch":
+            {
+              "tags": ["Посты"],
+              "summary": "Установить ответ на вопрос",
+              "operationId": "setAnswer",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID поста-вопроса",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                    "example": 42,
+                  },
+                ],
+              "requestBody":
+                {
+                  "content":
+                    {
+                      "application/json":
+                        {
+                          "schema":
+                            { "$ref": "#/components/schemas/SetAnswerRequest" },
+                        },
+                    },
+                  "required": true,
+                },
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "204": { "description": "No Content" },
+                },
+            },
+        },
+      "/posts":
+        {
+          "get":
+            {
+              "tags": ["Посты"],
+              "summary": "Получить список постов",
+              "description": "Возвращает пагинированный список постов, по параметру поиска или постов, если параметр не задан",
+              "operationId": "getPosts",
+              "parameters":
+                [
+                  {
+                    "name": "query",
+                    "in": "query",
+                    "description": "Строка поиска по постам",
+                    "required": false,
+                    "schema": { "type": "string" },
+                    "example": "Spring Boot",
+                  },
+                  {
+                    "name": "parentId",
+                    "in": "query",
+                    "description": "ID родительского поста для получения ответов",
+                    "required": false,
+                    "schema": { "type": "integer", "format": "int64" },
+                    "example": 42,
+                  },
+                  {
+                    "name": "tagId",
+                    "in": "query",
+                    "description": "ID тега для фильтрации постов",
+                    "required": false,
+                    "schema": { "type": "integer", "format": "int64" },
+                    "example": 2,
+                  },
+                  {
+                    "name": "page",
+                    "in": "query",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int32" },
+                  },
+                  {
+                    "name": "size",
+                    "in": "query",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int32" },
+                  },
+                  {
+                    "name": "sortBy",
+                    "in": "query",
+                    "required": false,
+                    "schema":
+                      {
+                        "type": "string",
+                        "enum": ["RANK", "CREATED", "SCORE"],
+                      },
+                  },
+                  {
+                    "name": "sortDir",
+                    "in": "query",
+                    "required": false,
+                    "schema": { "type": "string", "enum": ["ASC", "DESC"] },
+                  },
+                ],
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "200":
+                    {
+                      "description": "OK",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/PagePostDTO" },
+                            },
+                        },
+                    },
+                },
+            },
+          "post":
+            {
+              "tags": ["Посты"],
+              "summary": "Создать новый пост",
+              "description": "Создает новый пост от имени аутентифицированного пользователя",
+              "operationId": "createPost",
+              "requestBody":
+                {
+                  "content":
+                    {
+                      "application/json":
+                        {
+                          "schema":
+                            {
+                              "$ref": "#/components/schemas/CreatePostRequest",
+                            },
+                        },
+                    },
+                  "required": true,
+                },
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "200":
+                    {
+                      "description": "OK",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/PostDTO" },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+      "/posts/{id}/votes":
+        {
+          "get":
+            {
+              "tags": ["Голоса"],
+              "summary": "Получить голос за пост",
+              "description": "Загружает голос авторизованного пользователя на указанный пост",
+              "operationId": "getVote",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID поста",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                    "example": 42,
+                  },
+                ],
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "200":
+                    {
+                      "description": "OK",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/VoteDTO" },
+                            },
+                        },
+                    },
+                },
+            },
+          "post":
+            {
+              "tags": ["Голоса"],
+              "summary": "Голосовать за пост",
+              "description": "Создает голос за пост от имени аутентифицированного пользователя",
+              "operationId": "createVote",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID поста",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                    "example": 42,
+                  },
+                ],
+              "requestBody":
+                {
+                  "content":
+                    {
+                      "application/json":
+                        {
+                          "schema":
+                            {
+                              "type": "string",
+                              "enum": ["POSITIVE", "NEGATIVE"],
+                            },
+                        },
+                    },
+                  "required": true,
+                },
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "200": { "description": "OK" },
+                },
+            },
+        },
+      "/comments":
+        {
+          "get":
+            {
+              "tags": ["Комментарии"],
+              "summary": "Получить список комментариев к посту",
+              "operationId": "getPostComments",
+              "parameters":
+                [
+                  {
+                    "name": "postId",
+                    "in": "query",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                  },
+                  {
+                    "name": "page",
+                    "in": "query",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int32" },
+                  },
+                  {
+                    "name": "size",
+                    "in": "query",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int32" },
+                  },
+                ],
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "200":
+                    {
+                      "description": "OK",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/PageCommentDTO",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+          "post":
+            {
+              "tags": ["Комментарии"],
+              "summary": "Создать комментарий",
+              "operationId": "createComment",
+              "requestBody":
+                {
+                  "content":
+                    {
+                      "application/json":
+                        {
+                          "schema":
+                            {
+                              "$ref": "#/components/schemas/CreateCommentRequest",
+                            },
+                        },
+                    },
+                  "required": true,
+                },
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "200":
+                    {
+                      "description": "OK",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/CommentDTO" },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+      "/comments/{id}":
+        {
+          "put":
+            {
+              "tags": ["Комментарии"],
+              "summary": "Обновить комментарий",
+              "operationId": "updateComment",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                  },
+                ],
+              "requestBody":
+                {
+                  "content":
+                    {
+                      "application/json":
+                        {
+                          "schema":
+                            {
+                              "$ref": "#/components/schemas/UpdateCommentRequest",
+                            },
+                        },
+                    },
+                  "required": true,
+                },
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "204": { "description": "No Content" },
+                },
+            },
+          "delete":
+            {
+              "tags": ["Комментарии"],
+              "summary": "Удалить комментарий",
+              "operationId": "deleteComment",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                  },
+                ],
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "204": { "description": "No Content" },
+                },
+            },
+        },
+      "/tags":
+        {
+          "get":
+            {
+              "tags": ["Теги"],
+              "summary": "Получить список тэгов. Если указан префикс, возвращает тэги с префиксом",
+              "operationId": "getTags",
+              "parameters":
+                [
+                  {
+                    "name": "prefix",
+                    "in": "query",
+                    "required": false,
+                    "schema": { "type": "string" },
+                  },
+                  {
+                    "name": "page",
+                    "in": "query",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int32" },
+                  },
+                  {
+                    "name": "size",
+                    "in": "query",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int32" },
+                  },
+                  {
+                    "name": "sort",
+                    "in": "query",
+                    "required": false,
+                    "schema":
+                      { "type": "array", "items": { "type": "string" } },
+                  },
+                ],
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "200":
+                    {
+                      "description": "OK",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/PageTagDTO" },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+      "/tags/{id}":
+        {
+          "get":
+            {
+              "tags": ["Теги"],
+              "summary": "Получить тэг",
+              "operationId": "getTagById",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                  },
+                ],
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "200":
+                    {
+                      "description": "OK",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/TagDTO" },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+      "/subscribes/posts":
+        {
+          "get":
+            {
+              "tags": ["Подписки"],
+              "summary": "Получить подписки на посты",
+              "operationId": "getAllPostSubscribe",
+              "parameters":
+                [
+                  {
+                    "name": "page",
+                    "in": "query",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int32" },
+                  },
+                  {
+                    "name": "size",
+                    "in": "query",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int32" },
+                  },
+                ],
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "200":
+                    {
+                      "description": "OK",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/PagePostSubscribeDTO",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+      "/subscribes/posts/{id}":
+        {
+          "post":
+            {
+              "tags": ["Подписки"],
+              "summary": "Создать подписку на пост",
+              "operationId": "createPostSubscribe",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                  },
+                ],
+              "requestBody":
+                {
+                  "content":
+                    {
+                      "application/json":
+                        {
+                          "schema":
+                            {
+                              "$ref": "#/components/schemas/CreateSubscribeRequest",
+                            },
+                        },
+                    },
+                  "required": true,
+                },
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "200":
+                    {
+                      "description": "OK",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/PostSubscribeDTO",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+          "put":
+            {
+              "tags": ["Подписки"],
+              "summary": "Обновить подписку на пост",
+              "operationId": "updatePostSubscribe",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                  },
+                ],
+              "requestBody":
+                {
+                  "content":
+                    {
+                      "application/json":
+                        {
+                          "schema":
+                            {
+                              "$ref": "#/components/schemas/UpdateSubscribeRequest",
+                            },
+                        },
+                    },
+                  "required": true,
+                },
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "204": { "description": "No Content" },
+                },
+            },
+          "delete":
+            {
+              "tags": ["Подписки"],
+              "summary": "Удалить подписку на пост",
+              "operationId": "deletePostSubscribe",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                  },
+                ],
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "204": { "description": "No Content" },
+                },
+            },
+        },
+      "/subscribes/tags":
+        {
+          "get":
+            {
+              "tags": ["Подписки"],
+              "summary": "Получить подписки на тэги",
+              "operationId": "getAllTagSubscribe",
+              "parameters":
+                [
+                  {
+                    "name": "page",
+                    "in": "query",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int32" },
+                  },
+                  {
+                    "name": "size",
+                    "in": "query",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int32" },
+                  },
+                ],
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "200":
+                    {
+                      "description": "OK",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/PageTagSubscribeDTO",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+      "/subscribes/tags/{id}":
+        {
+          "post":
+            {
+              "tags": ["Подписки"],
+              "summary": "Создать подписку на тэг",
+              "operationId": "createTagSubscribe",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                  },
+                ],
+              "requestBody":
+                {
+                  "content":
+                    {
+                      "application/json":
+                        {
+                          "schema":
+                            {
+                              "$ref": "#/components/schemas/CreateSubscribeRequest",
+                            },
+                        },
+                    },
+                  "required": true,
+                },
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "200":
+                    {
+                      "description": "OK",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/TagSubscribeDTO",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+          "put":
+            {
+              "tags": ["Подписки"],
+              "summary": "Обновить подписку на тэг",
+              "operationId": "updateTagSubscribe",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                  },
+                ],
+              "requestBody":
+                {
+                  "content":
+                    {
+                      "application/json":
+                        {
+                          "schema":
+                            {
+                              "$ref": "#/components/schemas/UpdateSubscribeRequest",
+                            },
+                        },
+                    },
+                  "required": true,
+                },
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "204": { "description": "No Content" },
+                },
+            },
+          "delete":
+            {
+              "tags": ["Подписки"],
+              "summary": "Удалить подписку на тэг",
+              "operationId": "deleteTagSubscribe",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                  },
+                ],
+              "responses":
+                {
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "204": { "description": "No Content" },
+                },
+            },
+        },
+    },
+  "components":
+    {
+      "schemas":
+        {
+          "ErrorDetailsObject":
+            {
+              "type": "object",
+              "properties": { "message": { "type": "string" }, "details": {} },
+            },
+          "UpdateSubscribeRequest":
+            {
+              "type": "object",
+              "properties": { "isNotification": { "type": "boolean" } },
+            },
+          "CreateSubscribeRequest":
+            {
+              "type": "object",
+              "properties": { "isNotification": { "type": "boolean" } },
+            },
+          "TagDTO":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "id": { "type": "integer", "format": "int64" },
+                  "name": { "type": "string" },
+                  "postId": { "type": "integer", "format": "int64" },
+                },
+            },
+          "UpdatePostRequest":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "title":
+                    { "type": "string", "maxLength": 150, "minLength": 5 },
+                  "body":
+                    { "type": "string", "maxLength": 5000, "minLength": 20 },
+                  "answerId":
+                    { "type": "integer", "format": "int64", "minimum": 1 },
+                  "tags":
+                    {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/TagDTO" },
+                      "uniqueItems": true,
+                    },
+                },
+              "required": ["body", "tags"],
+            },
+          "UpdateCommentRequest":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "body":
+                    { "type": "string", "maxLength": 1000, "minLength": 1 },
+                },
+              "required": ["body"],
+            },
+          "TagSubscribeDTO":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "tagId": { "type": "integer", "format": "int64" },
+                  "isNotification": { "type": "boolean" },
+                },
+            },
+          "PostSubscribeDTO":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "postId": { "type": "integer", "format": "int64" },
+                  "isNotification": { "type": "boolean" },
+                },
+            },
+          "CreatePostRequest":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "title":
+                    { "type": "string", "maxLength": 150, "minLength": 5 },
+                  "body":
+                    { "type": "string", "maxLength": 5000, "minLength": 20 },
+                  "postType":
+                    { "type": "string", "enum": ["QUESTION", "ANSWER"] },
+                  "parentId":
+                    { "type": "integer", "format": "int64", "minimum": 1 },
+                  "tags":
+                    {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/TagDTO" },
+                      "uniqueItems": true,
+                    },
+                },
+              "required": ["body", "postType", "tags"],
+            },
+          "PostDTO":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "id": { "type": "integer", "format": "int64" },
+                  "title": { "type": "string" },
+                  "body": { "type": "string" },
+                  "postType":
+                    { "type": "string", "enum": ["QUESTION", "ANSWER"] },
+                  "author": { "$ref": "#/components/schemas/UserDTO" },
+                  "parentId": { "type": "integer", "format": "int64" },
+                  "answerId": { "type": "integer", "format": "int64" },
+                  "created": { "type": "string", "format": "date-time" },
+                  "updated": { "type": "string", "format": "date-time" },
+                  "score": { "type": "integer", "format": "int64" },
+                  "answersCount": { "type": "integer", "format": "int64" },
+                  "usersVote":
+                    { "type": "string", "enum": ["POSITIVE", "NEGATIVE"] },
+                  "tags":
+                    {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/TagDTO" },
+                    },
+                },
+            },
+          "UserDTO":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "id": { "type": "integer", "format": "int64" },
+                  "externalId": { "type": "integer", "format": "int64" },
+                  "internalId": { "type": "string", "format": "uuid" },
+                  "userType":
+                    { "type": "string", "enum": ["EXTERNAL", "INTERNAL"] },
+                  "name": { "type": "string" },
+                },
+            },
+          "CreateCommentRequest":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "body":
+                    { "type": "string", "maxLength": 1000, "minLength": 1 },
+                  "postId":
+                    { "type": "integer", "format": "int64", "minimum": 1 },
+                },
+              "required": ["body", "postId"],
+            },
+          "CommentDTO":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "id": { "type": "integer", "format": "int64" },
+                  "body": { "type": "string" },
+                  "author": { "$ref": "#/components/schemas/UserDTO" },
+                  "postId": { "type": "integer", "format": "int64" },
+                  "created": { "type": "string", "format": "date-time" },
+                  "updated": { "type": "string", "format": "date-time" },
+                },
+            },
+          "SetAnswerRequest":
+            {
+              "type": "object",
+              "properties":
+                { "answerId": { "type": "integer", "format": "int64" } },
+            },
+          "Pageable":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "page":
+                    { "type": "integer", "format": "int32", "minimum": 0 },
+                  "size":
+                    { "type": "integer", "format": "int32", "minimum": 1 },
+                  "sort": { "type": "array", "items": { "type": "string" } },
+                },
+            },
+          "PageTagDTO":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "totalElements": { "type": "integer", "format": "int64" },
+                  "totalPages": { "type": "integer", "format": "int32" },
+                  "pageable": { "$ref": "#/components/schemas/PageableObject" },
+                  "numberOfElements": { "type": "integer", "format": "int32" },
+                  "size": { "type": "integer", "format": "int32" },
+                  "content":
+                    {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/TagDTO" },
+                    },
+                  "number": { "type": "integer", "format": "int32" },
+                  "sort": { "$ref": "#/components/schemas/SortObject" },
+                  "first": { "type": "boolean" },
+                  "last": { "type": "boolean" },
+                  "empty": { "type": "boolean" },
+                },
+            },
+          "PageableObject":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "paged": { "type": "boolean" },
+                  "pageSize": { "type": "integer", "format": "int32" },
+                  "pageNumber": { "type": "integer", "format": "int32" },
+                  "unpaged": { "type": "boolean" },
+                  "offset": { "type": "integer", "format": "int64" },
+                  "sort": { "$ref": "#/components/schemas/SortObject" },
+                },
+            },
+          "SortObject":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "sorted": { "type": "boolean" },
+                  "unsorted": { "type": "boolean" },
+                  "empty": { "type": "boolean" },
+                },
+            },
+          "PageTagSubscribeDTO":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "totalElements": { "type": "integer", "format": "int64" },
+                  "totalPages": { "type": "integer", "format": "int32" },
+                  "pageable": { "$ref": "#/components/schemas/PageableObject" },
+                  "numberOfElements": { "type": "integer", "format": "int32" },
+                  "size": { "type": "integer", "format": "int32" },
+                  "content":
+                    {
+                      "type": "array",
+                      "items":
+                        { "$ref": "#/components/schemas/TagSubscribeDTO" },
+                    },
+                  "number": { "type": "integer", "format": "int32" },
+                  "sort": { "$ref": "#/components/schemas/SortObject" },
+                  "first": { "type": "boolean" },
+                  "last": { "type": "boolean" },
+                  "empty": { "type": "boolean" },
+                },
+            },
+          "PagePostSubscribeDTO":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "totalElements": { "type": "integer", "format": "int64" },
+                  "totalPages": { "type": "integer", "format": "int32" },
+                  "pageable": { "$ref": "#/components/schemas/PageableObject" },
+                  "numberOfElements": { "type": "integer", "format": "int32" },
+                  "size": { "type": "integer", "format": "int32" },
+                  "content":
+                    {
+                      "type": "array",
+                      "items":
+                        { "$ref": "#/components/schemas/PostSubscribeDTO" },
+                    },
+                  "number": { "type": "integer", "format": "int32" },
+                  "sort": { "$ref": "#/components/schemas/SortObject" },
+                  "first": { "type": "boolean" },
+                  "last": { "type": "boolean" },
+                  "empty": { "type": "boolean" },
+                },
+            },
+          "PagePostDTO":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "totalElements": { "type": "integer", "format": "int64" },
+                  "totalPages": { "type": "integer", "format": "int32" },
+                  "pageable": { "$ref": "#/components/schemas/PageableObject" },
+                  "numberOfElements": { "type": "integer", "format": "int32" },
+                  "size": { "type": "integer", "format": "int32" },
+                  "content":
+                    {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/PostDTO" },
+                    },
+                  "number": { "type": "integer", "format": "int32" },
+                  "sort": { "$ref": "#/components/schemas/SortObject" },
+                  "first": { "type": "boolean" },
+                  "last": { "type": "boolean" },
+                  "empty": { "type": "boolean" },
+                },
+            },
+          "VoteDTO":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "id": { "type": "integer", "format": "int64" },
+                  "postId": { "type": "integer", "format": "int64" },
+                  "created": { "type": "string", "format": "date-time" },
+                  "type":
+                    { "type": "string", "enum": ["POSITIVE", "NEGATIVE"] },
+                },
+            },
+          "PageCommentDTO":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "totalElements": { "type": "integer", "format": "int64" },
+                  "totalPages": { "type": "integer", "format": "int32" },
+                  "pageable": { "$ref": "#/components/schemas/PageableObject" },
+                  "numberOfElements": { "type": "integer", "format": "int32" },
+                  "size": { "type": "integer", "format": "int32" },
+                  "content":
+                    {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/CommentDTO" },
+                    },
+                  "number": { "type": "integer", "format": "int32" },
+                  "sort": { "$ref": "#/components/schemas/SortObject" },
+                  "first": { "type": "boolean" },
+                  "last": { "type": "boolean" },
+                  "empty": { "type": "boolean" },
+                },
+            },
+        },
+      "securitySchemes":
+        {
+          "JWTAuth":
+            { "type": "http", "scheme": "bearer", "bearerFormat": "JWT" },
+        },
+    },
+}

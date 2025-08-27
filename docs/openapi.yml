@@ -7,31 +7,75 @@
       "description": "API для взаимодействия клиентской и серверной части сервиса",
     },
   "servers":
-    [{ "url": "http://127.0.0.1", "description": "Generated server url" }],
+    [
+      {
+        "url": "http://10.10.146.238/api/muse",
+        "description": "Generated server url",
+      },
+    ],
   "security": [{ "JWTAuth": [] }],
   "paths":
     {
-      "/posts/{id}":
+      "/subscribes/tags/{id}":
         {
-          "get":
+          "put":
             {
-              "tags": ["Посты"],
-              "summary": "Получить пост по ID",
-              "description": "Возвращает пост по указанному идентификатору",
-              "operationId": "getPostById",
+              "tags": ["Подписки на теги"],
+              "summary": "Обновить подписку на тэг",
+              "operationId": "updateTagSubscribe",
               "parameters":
                 [
                   {
                     "name": "id",
                     "in": "path",
-                    "description": "ID поста",
                     "required": true,
                     "schema": { "type": "integer", "format": "int64" },
-                    "example": 42,
                   },
                 ],
+              "requestBody":
+                {
+                  "content":
+                    {
+                      "application/json":
+                        {
+                          "schema":
+                            {
+                              "$ref": "#/components/schemas/UpdateSubscribeRequest",
+                            },
+                        },
+                    },
+                  "required": true,
+                },
               "responses":
                 {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
                   "404":
                     {
                       "description": "Not Found",
@@ -42,6 +86,601 @@
                               "schema":
                                 {
                                   "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                  "204": { "description": "No Content" },
+                },
+            },
+          "post":
+            {
+              "tags": ["Подписки на теги"],
+              "summary": "Создать подписку на тэг",
+              "operationId": "createTagSubscribe",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                  },
+                ],
+              "requestBody":
+                {
+                  "content":
+                    {
+                      "application/json":
+                        {
+                          "schema":
+                            {
+                              "$ref": "#/components/schemas/CreateSubscribeRequest",
+                            },
+                        },
+                    },
+                  "required": true,
+                },
+              "responses":
+                {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                  "200":
+                    {
+                      "description": "OK",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/TagSubscribeDTO",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+          "delete":
+            {
+              "tags": ["Подписки на теги"],
+              "summary": "Удалить подписку на тэг",
+              "operationId": "deleteTagSubscribe",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                  },
+                ],
+              "responses":
+                {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                  "204": { "description": "No Content" },
+                },
+            },
+        },
+      "/subscribes/posts/{id}":
+        {
+          "put":
+            {
+              "tags": ["Подписки на посты"],
+              "summary": "Обновить подписку на пост",
+              "operationId": "updatePostSubscribe",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                  },
+                ],
+              "requestBody":
+                {
+                  "content":
+                    {
+                      "application/json":
+                        {
+                          "schema":
+                            {
+                              "$ref": "#/components/schemas/UpdateSubscribeRequest",
+                            },
+                        },
+                    },
+                  "required": true,
+                },
+              "responses":
+                {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                  "204": { "description": "No Content" },
+                },
+            },
+          "post":
+            {
+              "tags": ["Подписки на посты"],
+              "summary": "Создать подписку на пост",
+              "operationId": "createPostSubscribe",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                  },
+                ],
+              "requestBody":
+                {
+                  "content":
+                    {
+                      "application/json":
+                        {
+                          "schema":
+                            {
+                              "$ref": "#/components/schemas/CreateSubscribeRequest",
+                            },
+                        },
+                    },
+                  "required": true,
+                },
+              "responses":
+                {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                  "200":
+                    {
+                      "description": "OK",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/PostSubscribeDTO",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+          "delete":
+            {
+              "tags": ["Подписки на посты"],
+              "summary": "Удалить подписку на пост",
+              "operationId": "deletePostSubscribe",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                  },
+                ],
+              "responses":
+                {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                  "204": { "description": "No Content" },
+                },
+            },
+        },
+      "/posts/{id}":
+        {
+          "get":
+            {
+              "tags": ["Посты"],
+              "summary": "Получить пост по ID",
+              "description": "Возвращает пост по указанному идентификатору",
+              "operationId": "getPost",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                  },
+                ],
+              "responses":
+                {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
                                 },
                             },
                         },
@@ -63,17 +702,15 @@
           "put":
             {
               "tags": ["Посты"],
-              "summary": "Устанавливает ответ к посту",
+              "summary": "Обновить пост",
               "operationId": "updatePost",
               "parameters":
                 [
                   {
                     "name": "id",
                     "in": "path",
-                    "description": "ID поста",
                     "required": true,
                     "schema": { "type": "integer", "format": "int64" },
-                    "example": 42,
                   },
                 ],
               "requestBody":
@@ -92,6 +729,34 @@
                 },
               "responses":
                 {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
                   "404":
                     {
                       "description": "Not Found",
@@ -102,6 +767,28 @@
                               "schema":
                                 {
                                   "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
                                 },
                             },
                         },
@@ -120,14 +807,40 @@
                   {
                     "name": "id",
                     "in": "path",
-                    "description": "ID поста",
                     "required": true,
                     "schema": { "type": "integer", "format": "int64" },
-                    "example": 42,
                   },
                 ],
               "responses":
                 {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
                   "404":
                     {
                       "description": "Not Found",
@@ -142,23 +855,43 @@
                             },
                         },
                     },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
+                                },
+                            },
+                        },
+                    },
                   "204": { "description": "No Content" },
                 },
             },
           "patch":
             {
               "tags": ["Посты"],
-              "summary": "Установить ответ на вопрос",
+              "summary": "Отметить ответ как правильный",
               "operationId": "setAnswer",
               "parameters":
                 [
                   {
                     "name": "id",
                     "in": "path",
-                    "description": "ID поста-вопроса",
                     "required": true,
                     "schema": { "type": "integer", "format": "int64" },
-                    "example": 42,
                   },
                 ],
               "requestBody":
@@ -175,6 +908,34 @@
                 },
               "responses":
                 {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
                   "404":
                     {
                       "description": "Not Found",
@@ -189,7 +950,425 @@
                             },
                         },
                     },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
+                                },
+                            },
+                        },
+                    },
                   "204": { "description": "No Content" },
+                },
+            },
+        },
+      "/comments/{id}":
+        {
+          "put":
+            {
+              "tags": ["Комментарии"],
+              "summary": "Обновить комментарий",
+              "operationId": "updateComment",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                  },
+                ],
+              "requestBody":
+                {
+                  "content":
+                    {
+                      "application/json":
+                        {
+                          "schema":
+                            {
+                              "$ref": "#/components/schemas/UpdateCommentRequest",
+                            },
+                        },
+                    },
+                  "required": true,
+                },
+              "responses":
+                {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                  "204": { "description": "No Content" },
+                },
+            },
+          "delete":
+            {
+              "tags": ["Комментарии"],
+              "summary": "Удалить комментарий",
+              "operationId": "deleteComment",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                  },
+                ],
+              "responses":
+                {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                  "204": { "description": "No Content" },
+                },
+            },
+        },
+      "/tags":
+        {
+          "get":
+            {
+              "tags": ["Теги"],
+              "summary": "Получить список тегов. Если указан префикс, возвращает тэги с префиксом",
+              "operationId": "getTags",
+              "parameters":
+                [
+                  {
+                    "name": "prefix",
+                    "in": "query",
+                    "required": false,
+                    "schema": { "type": "string" },
+                  },
+                  {
+                    "name": "page",
+                    "in": "query",
+                    "required": true,
+                    "schema":
+                      { "type": "integer", "format": "int32", "minimum": 0 },
+                  },
+                  {
+                    "name": "size",
+                    "in": "query",
+                    "required": true,
+                    "schema":
+                      {
+                        "type": "integer",
+                        "format": "int32",
+                        "maximum": 100,
+                        "minimum": 1,
+                      },
+                  },
+                ],
+              "responses":
+                {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                  "200":
+                    {
+                      "description": "OK",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/PageTagDTO" },
+                            },
+                        },
+                    },
+                },
+            },
+          "post":
+            {
+              "tags": ["Теги"],
+              "summary": "Создать тег",
+              "operationId": "createTag",
+              "requestBody":
+                {
+                  "content":
+                    {
+                      "application/json":
+                        {
+                          "schema":
+                            { "$ref": "#/components/schemas/CreateTagRequest" },
+                        },
+                    },
+                  "required": true,
+                },
+              "responses":
+                {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                  "200":
+                    {
+                      "description": "OK",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/TagDTO" },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -206,38 +1385,45 @@
                   {
                     "name": "query",
                     "in": "query",
-                    "description": "Строка поиска по постам",
                     "required": false,
                     "schema": { "type": "string" },
-                    "example": "Spring Boot",
                   },
                   {
                     "name": "parentId",
                     "in": "query",
-                    "description": "ID родительского поста для получения ответов",
                     "required": false,
                     "schema": { "type": "integer", "format": "int64" },
-                    "example": 42,
                   },
                   {
                     "name": "tagId",
                     "in": "query",
-                    "description": "ID тега для фильтрации постов",
                     "required": false,
                     "schema": { "type": "integer", "format": "int64" },
-                    "example": 2,
+                  },
+                  {
+                    "name": "opened",
+                    "in": "query",
+                    "required": false,
+                    "schema": { "type": "boolean", "default": false },
                   },
                   {
                     "name": "page",
                     "in": "query",
                     "required": true,
-                    "schema": { "type": "integer", "format": "int32" },
+                    "schema":
+                      { "type": "integer", "format": "int32", "minimum": 0 },
                   },
                   {
                     "name": "size",
                     "in": "query",
                     "required": true,
-                    "schema": { "type": "integer", "format": "int32" },
+                    "schema":
+                      {
+                        "type": "integer",
+                        "format": "int32",
+                        "maximum": 100,
+                        "minimum": 1,
+                      },
                   },
                   {
                     "name": "sortBy",
@@ -258,6 +1444,34 @@
                 ],
               "responses":
                 {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
                   "404":
                     {
                       "description": "Not Found",
@@ -268,6 +1482,28 @@
                               "schema":
                                 {
                                   "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
                                 },
                             },
                         },
@@ -308,6 +1544,34 @@
                 },
               "responses":
                 {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
                   "404":
                     {
                       "description": "Not Found",
@@ -318,6 +1582,28 @@
                               "schema":
                                 {
                                   "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
                                 },
                             },
                         },
@@ -341,7 +1627,7 @@
         {
           "get":
             {
-              "tags": ["Голоса"],
+              "tags": ["Голосование"],
               "summary": "Получить голос за пост",
               "description": "Загружает голос авторизованного пользователя на указанный пост",
               "operationId": "getVote",
@@ -350,14 +1636,40 @@
                   {
                     "name": "id",
                     "in": "path",
-                    "description": "ID поста",
                     "required": true,
                     "schema": { "type": "integer", "format": "int64" },
-                    "example": 42,
                   },
                 ],
               "responses":
                 {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
                   "404":
                     {
                       "description": "Not Found",
@@ -368,6 +1680,28 @@
                               "schema":
                                 {
                                   "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
                                 },
                             },
                         },
@@ -388,7 +1722,7 @@
             },
           "post":
             {
-              "tags": ["Голоса"],
+              "tags": ["Голосование"],
               "summary": "Голосовать за пост",
               "description": "Создает голос за пост от имени аутентифицированного пользователя",
               "operationId": "createVote",
@@ -397,10 +1731,8 @@
                   {
                     "name": "id",
                     "in": "path",
-                    "description": "ID поста",
                     "required": true,
                     "schema": { "type": "integer", "format": "int64" },
-                    "example": 42,
                   },
                 ],
               "requestBody":
@@ -420,6 +1752,34 @@
                 },
               "responses":
                 {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
                   "404":
                     {
                       "description": "Not Found",
@@ -434,7 +1794,113 @@
                             },
                         },
                     },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
+                                },
+                            },
+                        },
+                    },
                   "200": { "description": "OK" },
+                },
+            },
+          "delete":
+            {
+              "tags": ["Голосование"],
+              "summary": "Удалить голос за пост",
+              "description": "Удаляет голос авторизованного пользователя на указанный пост",
+              "operationId": "deleteVote",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": { "type": "integer", "format": "int64" },
+                  },
+                ],
+              "responses":
+                {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "404":
+                    {
+                      "description": "Not Found",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                  "204": { "description": "No Content" },
                 },
             },
         },
@@ -457,17 +1923,52 @@
                     "name": "page",
                     "in": "query",
                     "required": true,
-                    "schema": { "type": "integer", "format": "int32" },
+                    "schema":
+                      { "type": "integer", "format": "int32", "minimum": 0 },
                   },
                   {
                     "name": "size",
                     "in": "query",
                     "required": true,
-                    "schema": { "type": "integer", "format": "int32" },
+                    "schema":
+                      {
+                        "type": "integer",
+                        "format": "int32",
+                        "maximum": 100,
+                        "minimum": 1,
+                      },
                   },
                 ],
               "responses":
                 {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
                   "404":
                     {
                       "description": "Not Found",
@@ -478,6 +1979,28 @@
                               "schema":
                                 {
                                   "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
                                 },
                             },
                         },
@@ -519,6 +2042,34 @@
                 },
               "responses":
                 {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
                   "404":
                     {
                       "description": "Not Found",
@@ -529,6 +2080,28 @@
                               "schema":
                                 {
                                   "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
                                 },
                             },
                         },
@@ -548,162 +2121,13 @@
                 },
             },
         },
-      "/comments/{id}":
-        {
-          "put":
-            {
-              "tags": ["Комментарии"],
-              "summary": "Обновить комментарий",
-              "operationId": "updateComment",
-              "parameters":
-                [
-                  {
-                    "name": "id",
-                    "in": "path",
-                    "required": true,
-                    "schema": { "type": "integer", "format": "int64" },
-                  },
-                ],
-              "requestBody":
-                {
-                  "content":
-                    {
-                      "application/json":
-                        {
-                          "schema":
-                            {
-                              "$ref": "#/components/schemas/UpdateCommentRequest",
-                            },
-                        },
-                    },
-                  "required": true,
-                },
-              "responses":
-                {
-                  "404":
-                    {
-                      "description": "Not Found",
-                      "content":
-                        {
-                          "application/json":
-                            {
-                              "schema":
-                                {
-                                  "$ref": "#/components/schemas/ErrorDetailsObject",
-                                },
-                            },
-                        },
-                    },
-                  "204": { "description": "No Content" },
-                },
-            },
-          "delete":
-            {
-              "tags": ["Комментарии"],
-              "summary": "Удалить комментарий",
-              "operationId": "deleteComment",
-              "parameters":
-                [
-                  {
-                    "name": "id",
-                    "in": "path",
-                    "required": true,
-                    "schema": { "type": "integer", "format": "int64" },
-                  },
-                ],
-              "responses":
-                {
-                  "404":
-                    {
-                      "description": "Not Found",
-                      "content":
-                        {
-                          "application/json":
-                            {
-                              "schema":
-                                {
-                                  "$ref": "#/components/schemas/ErrorDetailsObject",
-                                },
-                            },
-                        },
-                    },
-                  "204": { "description": "No Content" },
-                },
-            },
-        },
-      "/tags":
-        {
-          "get":
-            {
-              "tags": ["Теги"],
-              "summary": "Получить список тэгов. Если указан префикс, возвращает тэги с префиксом",
-              "operationId": "getTags",
-              "parameters":
-                [
-                  {
-                    "name": "prefix",
-                    "in": "query",
-                    "required": false,
-                    "schema": { "type": "string" },
-                  },
-                  {
-                    "name": "page",
-                    "in": "query",
-                    "required": true,
-                    "schema": { "type": "integer", "format": "int32" },
-                  },
-                  {
-                    "name": "size",
-                    "in": "query",
-                    "required": true,
-                    "schema": { "type": "integer", "format": "int32" },
-                  },
-                  {
-                    "name": "sort",
-                    "in": "query",
-                    "required": false,
-                    "schema":
-                      { "type": "array", "items": { "type": "string" } },
-                  },
-                ],
-              "responses":
-                {
-                  "404":
-                    {
-                      "description": "Not Found",
-                      "content":
-                        {
-                          "application/json":
-                            {
-                              "schema":
-                                {
-                                  "$ref": "#/components/schemas/ErrorDetailsObject",
-                                },
-                            },
-                        },
-                    },
-                  "200":
-                    {
-                      "description": "OK",
-                      "content":
-                        {
-                          "application/json":
-                            {
-                              "schema":
-                                { "$ref": "#/components/schemas/PageTagDTO" },
-                            },
-                        },
-                    },
-                },
-            },
-        },
       "/tags/{id}":
         {
           "get":
             {
               "tags": ["Теги"],
-              "summary": "Получить тэг",
-              "operationId": "getTagById",
+              "summary": "Получить тег",
+              "operationId": "getTag",
               "parameters":
                 [
                   {
@@ -715,6 +2139,34 @@
                 ],
               "responses":
                 {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
                   "404":
                     {
                       "description": "Not Found",
@@ -725,6 +2177,28 @@
                               "schema":
                                 {
                                   "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
                                 },
                             },
                         },
@@ -743,176 +2217,11 @@
                     },
                 },
             },
-        },
-      "/subscribes/posts":
-        {
-          "get":
-            {
-              "tags": ["Подписки"],
-              "summary": "Получить подписки на посты",
-              "operationId": "getAllPostSubscribe",
-              "parameters":
-                [
-                  {
-                    "name": "page",
-                    "in": "query",
-                    "required": true,
-                    "schema": { "type": "integer", "format": "int32" },
-                  },
-                  {
-                    "name": "size",
-                    "in": "query",
-                    "required": true,
-                    "schema": { "type": "integer", "format": "int32" },
-                  },
-                ],
-              "responses":
-                {
-                  "404":
-                    {
-                      "description": "Not Found",
-                      "content":
-                        {
-                          "application/json":
-                            {
-                              "schema":
-                                {
-                                  "$ref": "#/components/schemas/ErrorDetailsObject",
-                                },
-                            },
-                        },
-                    },
-                  "200":
-                    {
-                      "description": "OK",
-                      "content":
-                        {
-                          "application/json":
-                            {
-                              "schema":
-                                {
-                                  "$ref": "#/components/schemas/PagePostSubscribeDTO",
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-        },
-      "/subscribes/posts/{id}":
-        {
-          "post":
-            {
-              "tags": ["Подписки"],
-              "summary": "Создать подписку на пост",
-              "operationId": "createPostSubscribe",
-              "parameters":
-                [
-                  {
-                    "name": "id",
-                    "in": "path",
-                    "required": true,
-                    "schema": { "type": "integer", "format": "int64" },
-                  },
-                ],
-              "requestBody":
-                {
-                  "content":
-                    {
-                      "application/json":
-                        {
-                          "schema":
-                            {
-                              "$ref": "#/components/schemas/CreateSubscribeRequest",
-                            },
-                        },
-                    },
-                  "required": true,
-                },
-              "responses":
-                {
-                  "404":
-                    {
-                      "description": "Not Found",
-                      "content":
-                        {
-                          "application/json":
-                            {
-                              "schema":
-                                {
-                                  "$ref": "#/components/schemas/ErrorDetailsObject",
-                                },
-                            },
-                        },
-                    },
-                  "200":
-                    {
-                      "description": "OK",
-                      "content":
-                        {
-                          "application/json":
-                            {
-                              "schema":
-                                {
-                                  "$ref": "#/components/schemas/PostSubscribeDTO",
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-          "put":
-            {
-              "tags": ["Подписки"],
-              "summary": "Обновить подписку на пост",
-              "operationId": "updatePostSubscribe",
-              "parameters":
-                [
-                  {
-                    "name": "id",
-                    "in": "path",
-                    "required": true,
-                    "schema": { "type": "integer", "format": "int64" },
-                  },
-                ],
-              "requestBody":
-                {
-                  "content":
-                    {
-                      "application/json":
-                        {
-                          "schema":
-                            {
-                              "$ref": "#/components/schemas/UpdateSubscribeRequest",
-                            },
-                        },
-                    },
-                  "required": true,
-                },
-              "responses":
-                {
-                  "404":
-                    {
-                      "description": "Not Found",
-                      "content":
-                        {
-                          "application/json":
-                            {
-                              "schema":
-                                {
-                                  "$ref": "#/components/schemas/ErrorDetailsObject",
-                                },
-                            },
-                        },
-                    },
-                  "204": { "description": "No Content" },
-                },
-            },
           "delete":
             {
-              "tags": ["Подписки"],
-              "summary": "Удалить подписку на пост",
-              "operationId": "deletePostSubscribe",
+              "tags": ["Теги"],
+              "summary": "Удалить тэг",
+              "operationId": "deleteTag",
               "parameters":
                 [
                   {
@@ -924,6 +2233,34 @@
                 ],
               "responses":
                 {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
                   "404":
                     {
                       "description": "Not Found",
@@ -938,7 +2275,29 @@
                             },
                         },
                     },
-                  "204": { "description": "No Content" },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                  "200": { "description": "OK" },
                 },
             },
         },
@@ -946,7 +2305,7 @@
         {
           "get":
             {
-              "tags": ["Подписки"],
+              "tags": ["Подписки на теги"],
               "summary": "Получить подписки на тэги",
               "operationId": "getAllTagSubscribe",
               "parameters":
@@ -955,17 +2314,52 @@
                     "name": "page",
                     "in": "query",
                     "required": true,
-                    "schema": { "type": "integer", "format": "int32" },
+                    "schema":
+                      { "type": "integer", "format": "int32", "minimum": 0 },
                   },
                   {
                     "name": "size",
                     "in": "query",
                     "required": true,
-                    "schema": { "type": "integer", "format": "int32" },
+                    "schema":
+                      {
+                        "type": "integer",
+                        "format": "int32",
+                        "maximum": 100,
+                        "minimum": 1,
+                      },
                   },
                 ],
               "responses":
                 {
+                  "409":
+                    {
+                      "description": "Conflict",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
                   "404":
                     {
                       "description": "Not Found",
@@ -976,6 +2370,28 @@
                               "schema":
                                 {
                                   "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
                                 },
                             },
                         },
@@ -997,38 +2413,81 @@
                 },
             },
         },
-      "/subscribes/tags/{id}":
+      "/subscribes/posts":
         {
-          "post":
+          "get":
             {
-              "tags": ["Подписки"],
-              "summary": "Создать подписку на тэг",
-              "operationId": "createTagSubscribe",
+              "tags": ["Подписки на посты"],
+              "summary": "Получить подписанные посты",
+              "operationId": "getAllPostSubscribe",
               "parameters":
                 [
                   {
-                    "name": "id",
-                    "in": "path",
+                    "name": "page",
+                    "in": "query",
                     "required": true,
-                    "schema": { "type": "integer", "format": "int64" },
+                    "schema":
+                      { "type": "integer", "format": "int32", "minimum": 0 },
+                  },
+                  {
+                    "name": "size",
+                    "in": "query",
+                    "required": true,
+                    "schema":
+                      {
+                        "type": "integer",
+                        "format": "int32",
+                        "maximum": 100,
+                        "minimum": 1,
+                      },
+                  },
+                  {
+                    "name": "sortBy",
+                    "in": "query",
+                    "required": false,
+                    "schema":
+                      {
+                        "type": "string",
+                        "enum": ["RANK", "CREATED", "SCORE"],
+                      },
+                  },
+                  {
+                    "name": "sortDir",
+                    "in": "query",
+                    "required": false,
+                    "schema": { "type": "string", "enum": ["ASC", "DESC"] },
                   },
                 ],
-              "requestBody":
+              "responses":
                 {
-                  "content":
+                  "409":
                     {
-                      "application/json":
+                      "description": "Conflict",
+                      "content":
                         {
-                          "schema":
+                          "application/json":
                             {
-                              "$ref": "#/components/schemas/CreateSubscribeRequest",
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
                             },
                         },
                     },
-                  "required": true,
-                },
-              "responses":
-                {
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
                   "404":
                     {
                       "description": "Not Found",
@@ -1039,6 +2498,28 @@
                               "schema":
                                 {
                                   "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
+                  "400":
+                    {
+                      "description": "Bad Request",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
                                 },
                             },
                         },
@@ -1051,44 +2532,94 @@
                           "application/json":
                             {
                               "schema":
-                                {
-                                  "$ref": "#/components/schemas/TagSubscribeDTO",
-                                },
+                                { "$ref": "#/components/schemas/PagePostDTO" },
                             },
                         },
                     },
                 },
             },
-          "put":
+        },
+      "/feed":
+        {
+          "get":
             {
-              "tags": ["Подписки"],
-              "summary": "Обновить подписку на тэг",
-              "operationId": "updateTagSubscribe",
+              "tags": ["Лента рекомендаций по подпискам"],
+              "summary": "Возвращает открытые вопросы по подпискам пользователя",
+              "operationId": "getPostsBySubscribedTags",
               "parameters":
                 [
                   {
-                    "name": "id",
-                    "in": "path",
+                    "name": "opened",
+                    "in": "query",
+                    "required": false,
+                    "schema": { "type": "boolean", "default": false },
+                  },
+                  {
+                    "name": "page",
+                    "in": "query",
                     "required": true,
-                    "schema": { "type": "integer", "format": "int64" },
+                    "schema":
+                      { "type": "integer", "format": "int32", "minimum": 0 },
+                  },
+                  {
+                    "name": "size",
+                    "in": "query",
+                    "required": true,
+                    "schema":
+                      {
+                        "type": "integer",
+                        "format": "int32",
+                        "maximum": 100,
+                        "minimum": 1,
+                      },
+                  },
+                  {
+                    "name": "sortBy",
+                    "in": "query",
+                    "required": false,
+                    "schema":
+                      {
+                        "type": "string",
+                        "enum": ["RANK", "CREATED", "SCORE"],
+                      },
+                  },
+                  {
+                    "name": "sortDir",
+                    "in": "query",
+                    "required": false,
+                    "schema": { "type": "string", "enum": ["ASC", "DESC"] },
                   },
                 ],
-              "requestBody":
+              "responses":
                 {
-                  "content":
+                  "409":
                     {
-                      "application/json":
+                      "description": "Conflict",
+                      "content":
                         {
-                          "schema":
+                          "application/json":
                             {
-                              "$ref": "#/components/schemas/UpdateSubscribeRequest",
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
                             },
                         },
                     },
-                  "required": true,
-                },
-              "responses":
-                {
+                  "500":
+                    {
+                      "description": "Internal Server Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                },
+                            },
+                        },
+                    },
                   "404":
                     {
                       "description": "Not Found",
@@ -1103,40 +2634,40 @@
                             },
                         },
                     },
-                  "204": { "description": "No Content" },
-                },
-            },
-          "delete":
-            {
-              "tags": ["Подписки"],
-              "summary": "Удалить подписку на тэг",
-              "operationId": "deleteTagSubscribe",
-              "parameters":
-                [
-                  {
-                    "name": "id",
-                    "in": "path",
-                    "required": true,
-                    "schema": { "type": "integer", "format": "int64" },
-                  },
-                ],
-              "responses":
-                {
-                  "404":
+                  "400":
                     {
-                      "description": "Not Found",
+                      "description": "Bad Request",
                       "content":
                         {
                           "application/json":
                             {
                               "schema":
                                 {
-                                  "$ref": "#/components/schemas/ErrorDetailsObject",
+                                  "oneOf":
+                                    [
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsObject",
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/ErrorDetailsMapStringString",
+                                      },
+                                    ],
                                 },
                             },
                         },
                     },
-                  "204": { "description": "No Content" },
+                  "200":
+                    {
+                      "description": "OK",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/PagePostDTO" },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -1145,6 +2676,19 @@
     {
       "schemas":
         {
+          "ErrorDetailsMapStringString":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "message": { "type": "string" },
+                  "details":
+                    {
+                      "type": "object",
+                      "additionalProperties": { "type": "string" },
+                    },
+                },
+            },
           "ErrorDetailsObject":
             {
               "type": "object",
@@ -1154,11 +2698,7 @@
             {
               "type": "object",
               "properties": { "isNotification": { "type": "boolean" } },
-            },
-          "CreateSubscribeRequest":
-            {
-              "type": "object",
-              "properties": { "isNotification": { "type": "boolean" } },
+              "required": ["isNotification"],
             },
           "TagDTO":
             {
@@ -1169,6 +2709,7 @@
                   "name": { "type": "string" },
                   "postId": { "type": "integer", "format": "int64" },
                 },
+              "required": ["id"],
             },
           "UpdatePostRequest":
             {
@@ -1200,12 +2741,30 @@
                 },
               "required": ["body"],
             },
+          "CreateTagRequest":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "name": { "type": "string", "minLength": 1 },
+                  "postId":
+                    { "type": "integer", "format": "int64", "minimum": 1 },
+                },
+              "required": ["name"],
+            },
+          "CreateSubscribeRequest":
+            {
+              "type": "object",
+              "properties": { "isNotification": { "type": "boolean" } },
+              "required": ["isNotification"],
+            },
           "TagSubscribeDTO":
             {
               "type": "object",
               "properties":
                 {
                   "tagId": { "type": "integer", "format": "int64" },
+                  "tagName": { "type": "string" },
                   "isNotification": { "type": "boolean" },
                 },
             },
@@ -1259,10 +2818,15 @@
                   "answersCount": { "type": "integer", "format": "int64" },
                   "usersVote":
                     { "type": "string", "enum": ["POSITIVE", "NEGATIVE"] },
+                  "subscribe": { "type": "boolean" },
                   "tags":
                     {
-                      "type": "array",
-                      "items": { "$ref": "#/components/schemas/TagDTO" },
+                      "type": "string",
+                      "example":
+                        [
+                          { "id": 1, "name": "java", "postId": 1 },
+                          { "id": 2, "name": "spring", "postId": 2 },
+                        ],
                     },
                 },
             },
@@ -1309,18 +2873,6 @@
               "type": "object",
               "properties":
                 { "answerId": { "type": "integer", "format": "int64" } },
-            },
-          "Pageable":
-            {
-              "type": "object",
-              "properties":
-                {
-                  "page":
-                    { "type": "integer", "format": "int32", "minimum": 0 },
-                  "size":
-                    { "type": "integer", "format": "int32", "minimum": 1 },
-                  "sort": { "type": "array", "items": { "type": "string" } },
-                },
             },
           "PageTagDTO":
             {
@@ -1390,29 +2942,6 @@
                   "empty": { "type": "boolean" },
                 },
             },
-          "PagePostSubscribeDTO":
-            {
-              "type": "object",
-              "properties":
-                {
-                  "totalElements": { "type": "integer", "format": "int64" },
-                  "totalPages": { "type": "integer", "format": "int32" },
-                  "pageable": { "$ref": "#/components/schemas/PageableObject" },
-                  "numberOfElements": { "type": "integer", "format": "int32" },
-                  "size": { "type": "integer", "format": "int32" },
-                  "content":
-                    {
-                      "type": "array",
-                      "items":
-                        { "$ref": "#/components/schemas/PostSubscribeDTO" },
-                    },
-                  "number": { "type": "integer", "format": "int32" },
-                  "sort": { "$ref": "#/components/schemas/SortObject" },
-                  "first": { "type": "boolean" },
-                  "last": { "type": "boolean" },
-                  "empty": { "type": "boolean" },
-                },
-            },
           "PagePostDTO":
             {
               "type": "object",
@@ -1473,7 +3002,12 @@
       "securitySchemes":
         {
           "JWTAuth":
-            { "type": "http", "scheme": "bearer", "bearerFormat": "JWT" },
+            {
+              "type": "http",
+              "name": "JWTAuth",
+              "scheme": "bearer",
+              "bearerFormat": "JWT",
+            },
         },
     },
 }
