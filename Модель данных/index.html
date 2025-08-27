@@ -353,6 +353,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#posttag" class="md-nav__link">
+    <span class="md-ellipsis">
+      PostTag (Связь поста и тега)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#postsubscribe" class="md-nav__link">
     <span class="md-ellipsis">
       PostSubscribe (Подписка на пост)
@@ -365,15 +374,6 @@
   <a href="#tagsubscribe" class="md-nav__link">
     <span class="md-ellipsis">
       TagSubscribe (Подписка на тег)
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#role" class="md-nav__link">
-    <span class="md-ellipsis">
-      Role (Роль)
     </span>
   </a>
   
@@ -402,6 +402,15 @@
   <a href="#votetype" class="md-nav__link">
     <span class="md-ellipsis">
       VoteType (Тип голоса)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usertype" class="md-nav__link">
+    <span class="md-ellipsis">
+      UserType (Тип пользователя)
     </span>
   </a>
   
@@ -627,6 +636,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#posttag" class="md-nav__link">
+    <span class="md-ellipsis">
+      PostTag (Связь поста и тега)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#postsubscribe" class="md-nav__link">
     <span class="md-ellipsis">
       PostSubscribe (Подписка на пост)
@@ -639,15 +657,6 @@
   <a href="#tagsubscribe" class="md-nav__link">
     <span class="md-ellipsis">
       TagSubscribe (Подписка на тег)
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#role" class="md-nav__link">
-    <span class="md-ellipsis">
-      Role (Роль)
     </span>
   </a>
   
@@ -676,6 +685,15 @@
   <a href="#votetype" class="md-nav__link">
     <span class="md-ellipsis">
       VoteType (Тип голоса)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usertype" class="md-nav__link">
+    <span class="md-ellipsis">
+      UserType (Тип пользователя)
     </span>
   </a>
   
@@ -710,12 +728,15 @@
 <h2 id="user">User (Пользователь)</h2>
 <ul>
 <li><strong>id</strong> - идентификатор пользователя (IDENTITY)</li>
+<li><strong>user_type</strong> - тип пользователя (EXTERNAL, INTERNAL) - enum</li>
+<li><strong>internal_id</strong> - внутренний идентификатор (uuid)</li>
+<li><strong>external_id</strong> - внешний идентификатор</li>
 <li><strong>name</strong> - имя пользователя</li>
 </ul>
 <p><strong>Связи:</strong></p>
 <ul>
 <li>Один ко многим с Post (как автор)</li>
-<li>Один ко многим с Comment (как автор) </li>
+<li>Один ко многим с Comment (как автор)</li>
 <li>Один ко многим с Vote (как автор)</li>
 <li>Один ко многим с PostSubscribe</li>
 <li>Один ко многим с TagSubscribe</li>
@@ -726,12 +747,12 @@
 <li><strong>id</strong> - идентификатор поста (IDENTITY)</li>
 <li><strong>title</strong> - заголовок поста</li>
 <li><strong>body</strong> - текст поста</li>
-<li><strong>postType</strong> - тип поста (QUESTION, ANSWER) - enum</li>
+<li><strong>post_type</strong> - тип поста (QUESTION, ANSWER) - enum</li>
 <li><strong>author_id</strong> - идентификатор автора (внешний ключ)</li>
 <li><strong>parent_id</strong> - идентификатор родительского поста (внешний ключ)</li>
 <li><strong>answer_id</strong> - идентификатор принятого ответа (внешний ключ)</li>
 <li><strong>created</strong> - дата и время создания</li>
-<li><strong>update</strong> - дата и время обновления</li>
+<li><strong>updated</strong> - дата и время обновления</li>
 </ul>
 <p><strong>Связи:</strong></p>
 <ul>
@@ -740,7 +761,7 @@
 <li>Многие к одному с Post (принятый ответ)</li>
 <li>Один ко многим с Comment</li>
 <li>Один ко многим с Vote</li>
-<li>Один ко многим с Tag</li>
+<li>Один ко многим с PostTag (связь с тегами)</li>
 <li>Один ко многим с PostSubscribe</li>
 </ul>
 <hr />
@@ -748,16 +769,15 @@
 <ul>
 <li><strong>id</strong> - идентификатор комментария (IDENTITY)</li>
 <li><strong>body</strong> - текст комментария</li>
-<li><strong>author_id</strong> - идентификатор автора (внешний ключ)</li>
+<li><strong>author_id</strong> - идентификатор автора (внешнийкий ключ)</li>
 <li><strong>post_id</strong> - идентификатор поста (внешний ключ)</li>
 <li><strong>created</strong> - дата и время создания</li>
-<li><strong>update</strong> - дата и время обновления</li>
+<li><strong>updated</strong> - дата и время обновления</li>
 </ul>
 <p><strong>Связи:</strong></p>
 <ul>
 <li>Многие к одному с User (автор)</li>
 <li>Многие к одному с Post</li>
-<li>Один ко многим с Vote (связь через поле post в Vote)</li>
 </ul>
 <hr />
 <h2 id="vote">Vote (Голос)</h2>
@@ -776,21 +796,32 @@
 <hr />
 <h2 id="tag">Tag (Тег)</h2>
 <ul>
-<li><strong>id</strong> - идентификатор тега (сгенерированный)</li>
+<li><strong>id</strong> - идентификатор тега (IDENTITY)</li>
 <li><strong>name</strong> - название тега</li>
+</ul>
+<p><strong>Связи:</strong></p>
+<ul>
+<li>Один ко многим с PostTag (связь с постами)</li>
+<li>Один ко многим с TagSubscribe</li>
+</ul>
+<hr />
+<h2 id="posttag">PostTag (Связь поста и тега)</h2>
+<p>Составной ключ:</p>
+<ul>
 <li><strong>post_id</strong> - идентификатор поста (внешний ключ)</li>
+<li><strong>tag_id</strong> - идентификатор тега (внешний ключ)</li>
 </ul>
 <p><strong>Связи:</strong></p>
 <ul>
 <li>Многие к одному с Post</li>
-<li>Один ко многим с TagSubscribe</li>
+<li>Многие к одному с Tag</li>
 </ul>
 <hr />
 <h2 id="postsubscribe">PostSubscribe (Подписка на пост)</h2>
-<p>Составной ключ через <code>PostSubscribeId</code>:</p>
+<p>Составной ключ:</p>
 <ul>
-<li><strong>post_id</strong> - идентификатор поста</li>
-<li><strong>user_id</strong> - идентификатор пользователя</li>
+<li><strong>post_id</strong> - идентификатор поста (внешний ключ)</li>
+<li><strong>user_id</strong> - идентификатор пользователя (внешний ключ)</li>
 </ul>
 <p><strong>Связи:</strong></p>
 <ul>
@@ -799,25 +830,16 @@
 </ul>
 <hr />
 <h2 id="tagsubscribe">TagSubscribe (Подписка на тег)</h2>
-<p>Составной ключ через <code>TagSubscribeId</code>:</p>
+<p>Составной ключ:</p>
 <ul>
-<li><strong>tag_id</strong> - идентификатор тега</li>
-<li><strong>user_id</strong> - идентификатор пользователя</li>
+<li><strong>tag_id</strong> - идентификатор тега (внешний ключ)</li>
+<li><strong>user_id</strong> - идентификатор пользователя (внешний ключ)</li>
 </ul>
 <p><strong>Связи:</strong></p>
 <ul>
 <li>Многие к одному с Tag</li>
 <li>Многие к одному с User</li>
 </ul>
-<hr />
-<h2 id="role">Role (Роль)</h2>
-<p>Enum с значениями:</p>
-<ul>
-<li><strong>BASIC</strong> - базовая роль</li>
-<li><strong>MODER</strong> - модератор</li>
-<li><strong>ADMIN</strong> - администратор</li>
-</ul>
-<p><em>Примечание: В текущих Entity классах роль не используется в User</em></p>
 <hr />
 <h2 id="_1">Типы данных</h2>
 <h3 id="posttype">PostType (Тип поста)</h3>
@@ -830,8 +852,13 @@
 <li><strong>POSITIVE</strong> - положительный голос</li>
 <li><strong>NEGATIVE</strong> - отрицательный голос</li>
 </ul>
+<h3 id="usertype">UserType (Тип пользователя)</h3>
+<ul>
+<li><strong>EXTERNAL</strong> - внешний пользователь</li>
+<li><strong>INTERNAL</strong> - внутренний пользователь</li>
+</ul>
 <figure>
-    <img align="center" alt="Модель данных" src="../out/diagrams/ER/ER.svg" />
+    <img align="center" alt="Модель данных" src="../out/diagrams/ER/DB.svg" />
 <br />
 <figcaption>ER диаграмма</figcaption>
 </figure>
